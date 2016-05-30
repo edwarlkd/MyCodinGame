@@ -1,0 +1,69 @@
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <cstdlib>
+
+using namespace std;
+
+int main()
+{
+  string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ?";
+  vector<string> alpha_ascii;
+  int L, H;
+  string L_str, H_str, T;
+
+  getline(cin, L_str);
+  getline(cin, H_str); 
+  getline(cin, T);
+  T = "wharup";
+
+    //atoi(): Parses the string as an integral number
+    //c_str: A pointer to the c-string representation of the string object's value.
+    
+  L = atoi(L_str.c_str());
+  H = atoi(H_str.c_str());
+	
+    cerr << "L: " << L << endl;
+    cerr << "H: " << H << endl;
+    cerr << "L_str: " << L_str << endl;
+    cerr << "H_str: " << H_str << endl;
+    
+    cerr << endl;
+	
+  for (int i = 0; i < H; i++) { 
+    string line;
+    getline(cin, line);
+    alpha_ascii.push_back(line);
+    
+    cerr << "alpha_ascii[" << i << "] : " << alpha_ascii[i] << endl;
+  }
+	
+  vector<string> output(H, "");
+    
+    cerr << "T.length()=" << T.length() << endl; 
+    
+    
+    //Drwaing gets done for a letter each.
+    //Then, move onto next letter and fill with # in rows. 
+  for(int i=0; i<T.length(); i++) {
+    char s = toupper(T[i]);
+    if((s < 'A') or (s > 'Z')) //if not Capital letter, replace with ?
+      s = '?';
+    int index = alpha.find(s);
+    
+    for(int j=0; j<H; j++) {    //ohh ok ok. 
+      string s_line = alpha_ascii[j].substr(index*L, L);
+      output[j] += s_line;
+    }
+  }
+
+	
+  for(int i=0; i<H; i++) // output the result
+    cout << output[i] << endl;
+	
+cerr << endl;
+cerr << output[0] << endl;
+cerr << output[1] << endl << endl;
+  return 0;
+}
