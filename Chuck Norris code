@@ -36,7 +36,7 @@ int main()
 */
 
     //
-    vector<string> vecint;
+ 
     //so every index of 'vecint' is when binary respresentation changes (0 to 1, visavers)
     /*
         ex: 1 1 0 0 1 1 1
@@ -44,29 +44,47 @@ int main()
         vecint[1]: 00 00 ;two 0s following
         vecint[2]: 0 000 ; three 1s following
     */
+    vector<string> vecint;
+    string output = "";
     string ofzero = "00 ";
     string ofone = "0 ";
+    int counter = 0;
     int counter0 = 0;
     int counter1 = 0;
     int vecindex = 0;
-    for(int i = 0; i<7; i++)
+    bool priorone = 0; //1 == true and 0 == false
+    for(int i = 0; i<MESSAGE.length(); i++) //convert 
     {
-        //now convert
-        //3 case. first 1, 0, 1, 0... 
-
+        
+        output = "";
         if(bit_string[i]=='1')
         {
-         counter1++; 
-         counter0 = 0;
+            //check if continue with the previous ones
+            //outputting the appropriate. 
+            if(priorone == 1) //continue, so add. 
+            {
+                counter1++;
+            }
+            else //reset
+            {
+            counter1 = 1;
+            priorone = 1;            
+            counter0 = 0;
+            }
         }
         else if(bit_string[i]=='0')
-        {
-            
-         counter0++;
-         counter1 = 0;   
-        }
-
-        
+        {            
+            if(priorone == 0)
+            {
+                counter0++;   
+            }
+            else
+            {
+            counter0 = 1;
+            priorone = 0;
+            counter1 = 0;            
+            }
+        }        
     }
     
     // Write an action using cout. DON'T FORGET THE "<< endl"
