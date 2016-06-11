@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstdlib>
 #include <algorithm>
 #include <bitset>
 #include <typeinfo>
@@ -20,23 +21,12 @@ int main()
     getline(cin, MESSAGE);
     
     string text = MESSAGE; 
-    string bit_string = "";
+    string thebits = "";
     for(int i=0; i<text.length(); i++) {
     char s = text[i];
     bitset<7> bs(s);
-    bit_string += bs.to_string(); 
+    thebits += bs.to_string(); 
     }
-
-
-/*
-*how to approach the problem. 
-*read the binary value. 
-
-
-*/
-
-    //
- 
     //so every index of 'vecint' is when binary respresentation changes (0 to 1, visavers)
     /*
         ex: 1 1 0 0 1 1 1
@@ -44,57 +34,93 @@ int main()
         vecint[1]: 00 00 ;two 0s following
         vecint[2]: 0 000 ; three 1s following
     */
-    vector<string> vecint;
+    vector<string> vecoutput(1,"");
     string output = "";
     string ofzero = "00 ";
     string ofone = "0 ";
-    int counter = 0;
-    int counter0 = 0;
-    int counter1 = 0;
-    int vecindex = 0;
-    bool priorone = 0; //1 == true and 0 == false
-    for(int i = 0; i<MESSAGE.length(); i++) //convert 
+    char firstbit = thebits[0];
+ /*   if(thebits[0] == '0') //initial value
     {
-        
-        output = "";
-        if(bit_string[i]=='1')
+        ofzero+='0';
+    }
+    else if (thebits[0] == '1')
+    {
+        ofone+='0';   
+    }*/
+
+    cerr << firstbit << endl;
+    cerr << thebits << endl;
+    int j = 0;
+    for(int i = 1; i<=thebits.size(); i++) //convert 
+    { 
+        //1000011
+        //check with previous one if matches.matches
+        if(thebits[i-1] == thebits[i]) //equal
         {
-            //check if continue with the previous ones
-            //outputting the appropriate. 
-            if(priorone == 1) //continue, so add. 
+        cerr << "if called [i-1]==[i] ;;" << thebits[i-1] << "==" << thebits[i] << endl; 
+            if(thebits[i] == '0')
             {
-                counter1++;
+            ofzero+="0"; 
+            ofone ="0 "; //reset the ofone.
             }
-            else //reset
+            else if(thebits[i] =='1')
             {
-            counter1 = 1;
-            priorone = 1;            
-            counter0 = 0;
+            ofone+="0";
+            ofzero = "00 ";
             }
         }
-        else if(bit_string[i]=='0')
-        {            
-            if(priorone == 0)
+        else //push for new vector since it change. 
+        {
+            cerr << "else called)))))))))))" << thebits[i-1] << "==" << thebits[i] << endl; 
+
+            if(thebits[i-1] == '1') // ofone!="0 ". 
             {
-                counter0++;   
+                ofone+= '0';
+                output = ofone; 
+                
             }
-            else
+            else if(thebits[i-1] == '0')
             {
-            counter0 = 1;
-            priorone = 0;
-            counter1 = 0;            
+                ofzero+='0';
+                output = ofzero;
             }
-        }        
+           
+        vecoutput[j] = output; 
+        cerr << "vecoutput[" << j << "] = " << vecoutput[j] << endl;
+        vecoutput.push_back(""); 
+        j++;
+        }
+      
+        cerr << "output = " << output << endl;
+        cerr << "ofone = " << ofone << endl;
+        cerr << "ofzero = " << ofzero << endl; 
+        cerr << "================" << endl;
+        //if 0 then add to the output. 
+        //else if 1, then add to that output. 
+    
+    }  //end of for loop
+    
+    cerr << "vectoroutput size: " << vecoutput.size() << endl;
+    cerr << "~~~~~~~~~~~~~~~~~" << endl;
+
+    //output
+    cerr << "output following with vecoutputsize: " << vecoutput.size() << endl;
+    vecoutput.pop_back();
+    for(int i = 0; i < vecoutput.size(); i++)
+    {
+     cerr << "vecoutput[" << i << "]: " << vecoutput[i] << endl;    
     }
     
-    // Write an action using cout. DON'T FORGET THE "<< endl"
-    // To debug: cerr << "Debug messages..." << endl;
+    //result output
+    //first empty last vector.
     
-/*
-//http://static1.squarespace.com/static/55767a9ae4b0307eeda83889/t/55e7ea9ee4b0f7efbac5eeac/1441262240855/
-
-*/
- 
- 
- 
+    for(int i = 0; i < vecoutput.size(); i++)
+    {
+     cout << vecoutput[i];  
+     if(i != vecoutput.size()-1)
+     {
+         cout << " ";
+     }
+    }
+    
 }
