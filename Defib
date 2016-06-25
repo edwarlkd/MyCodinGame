@@ -1,0 +1,105 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cctype>
+
+using namespace std;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+  
+int calcx(int x1, int x2)
+{
+ int result = (x2-x1)*cos((x1+x2)/2);
+ return result;
+}
+
+int calcy(int y1, int y2)
+{
+    int result = (y2- y1);
+    return result;
+}
+int calcdistance(int x, int y)
+{
+    int result = sqrt((x*x)+(y*y));
+    return result*6371;
+}
+  
+int main()
+{
+    string LON;
+    cin >> LON; cin.ignore();
+    string LAT;
+    cin >> LAT; cin.ignore();
+    int N;
+    
+    int lon = atoi(LON.c_str());
+    int lat = atoi(LAT.c_str());
+    vector<string> vectordefib;
+    vector<int> vectordist;
+    
+    cin >> N; cin.ignore();
+    for (int i = 0; i < N; i++) {
+        string DEFIB;
+        getline(cin, DEFIB);
+        
+        vectordefib.push_back(DEFIB);
+        
+        cerr << "DEFIB: " << DEFIB << endl;
+    }
+
+    cerr << "LON: " << LON << endl;
+    cerr << "LAT: " << LAT << endl;
+    cerr << "N: " << N << endl;
+    
+    //use for loop to go thru each defib
+    //1. go thru each 'DEFIB' string and find(";;").
+    //(now, you're at string[#] for longtitude.
+    //(latitude) can be acquired find_from_last(";")
+    for(int i=0;i<N;i++)
+    {
+        //given LON, LAT, 
+        cerr << "DEFIB #" << i+1 << endl;
+        
+        int longlocation = vectordefib[i].find(";;")+2;
+        int latlocation = vectordefib[i].find_last_of(";")+1;
+        
+        //get the string numbers         
+        string longstring = vectordefib[i].substr(longlocation, 16);
+        string latstring = vectordefib[i].substr(latlocation,16);
+        
+        //remove the comma in that string
+        longstring.erase(remove(longstring.begin(), longstring.end(), ','), longstring.end());
+        latstring.erase(remove(latstring.begin(), latstring.end(), ','), latstring.end());
+        
+        //change them to integer
+        int longint = atoi(longstring.c_str());
+        int latint = atoi(longstring.c_str());
+        cerr << "longint: " << longint << endl;
+        cerr << "latint: " << latint << endl;
+
+        int x = calcx(lon, longint);
+        int y = calcy(lat, latint);
+        int disty = calcdistance(x,y);
+        vectordist.push_back(disty);
+    }
+    
+    //output for vectordist
+    for(int i = 0; i<N;i++)
+    {
+        cerr << "vectordsit: " << vectordist[i] << endl;
+    }
+
+    //find the defib number with the smallest distance
+    //(max_element) is an iterator ==> dereferenced
+    auto biggest = std::max_element(std::begin(vectordist), std::end(vectordist));
+    std::cout << "Max element is " << *biggest
+        << " at position " << std::distance(std::begin(vectordist), biggest) << std::endl;
+    int maxpos = distance(std::begin(vectordist), biggest);
+    
+    //lastly, output that defib name. 
+    
+}
