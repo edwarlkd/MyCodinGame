@@ -88,7 +88,7 @@ int main()
     }
     
     //output for vectordist
-    for(int i = 0; i<N;i++)
+    for(int i = 0; i<N;i++) //error, few comes out as neg
     {
         cerr << "vectordsit: " << vectordist[i] << endl;
     }
@@ -96,10 +96,16 @@ int main()
     //find the defib number with the smallest distance
     //(max_element) is an iterator ==> dereferenced
     auto biggest = std::max_element(std::begin(vectordist), std::end(vectordist));
-    std::cout << "Max element is " << *biggest
+    cerr << "Max element is " << *biggest
         << " at position " << std::distance(std::begin(vectordist), biggest) << std::endl;
-    int maxpos = distance(std::begin(vectordist), biggest);
-    
+    int maxpos = distance(std::begin(vectordist), biggest)-1;
+
     //lastly, output that defib name. 
-    
+    int filenamepos = vectordefib[maxpos].find(";")+1; //position of filename
+    int fileendpos = vectordefib[maxpos].find(";", filenamepos);
+    int difference = fileendpos-filenamepos;
+    cerr << "filenamepos: " << filenamepos << endl;
+    cerr << "fileendpos: " << fileendpos << endl;
+    string result = vectordefib[maxpos].substr(filenamepos, difference); //up to second of ;)
+    cout << result << endl; 
 }
