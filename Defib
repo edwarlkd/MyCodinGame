@@ -11,21 +11,36 @@ using namespace std;
  * the standard input according to the problem statement.
  **/
   
-int calcx(int x1, int x2)
+double calcx(double x1, double x2)
 {
- int result = (x2-x1)*cos((x1+x2)/2);
+ double result = (x2-x1)*(cos((x1+x2)/2));
  return result;
 }
 
-int calcy(int y1, int y2)
+double calcy(double y1, double y2)
 {
-    int result = (y2- y1);
+    double result = (y2- y1);
     return result;
 }
-int calcdistance(int x, int y)
+double calcdistance(double x, double y)
 {
-    int result = sqrt((x*x)+(y*y));
-    return result*6371;
+    double result = sqrt((x*x)+(y*y));
+    return (result*6371);
+}
+
+double replacecomma(string str)
+{
+    for(int i=0; i<str.size();i++)
+    {
+        if(str[i] == ',')
+        {
+         str[i] = '.';
+         break;
+        }
+    }
+    
+    double result = stod(str.c_str()); //convert string digits to int//comma?    
+    return result;
 }
   
 int main()
@@ -36,10 +51,13 @@ int main()
     cin >> LAT; cin.ignore();
     int N;
     
-    int lon = atoi(LON.c_str());
-    int lat = atoi(LAT.c_str());
+    //!!! From LON and LAT, replace the comma.
+    //then convert from 'String' to 'double'
+    double lon = replacecomma(LON);
+    double lat = replacecomma(LAT);
+    
     vector<string> vectordefib;
-    vector<int> vectordist;
+    vector<double> vectordist;
     
     cin >> N; cin.ignore();
     for (int i = 0; i < N; i++) {
@@ -48,24 +66,26 @@ int main()
         
         vectordefib.push_back(DEFIB);
         
-        cerr << "DEFIB: " << DEFIB << endl;
-    }
+     }
 
+
+    cerr << "N: " << N << endl;
+    cerr << "lon: " << lon << endl;
+    cerr << "lat: " << lat << endl;
     cerr << "LON: " << LON << endl;
     cerr << "LAT: " << LAT << endl;
-    cerr << "N: " << N << endl;
-    
+        
     //use for loop to go thru each defib
     //1. go thru each 'DEFIB' string and find(";;").
     //(now, you're at string[#] for longtitude.
     //(latitude) can be acquired find_from_last(";")
     for(int i=0;i<N;i++)
     {
-        //given LON, LAT, 
-        cerr << "DEFIB #" << i+1 << endl;
-        
-        int longlocation = vectordefib[i].find(";;")+2;
+        //fix this, find 2nd ";" from last
+        //int longlocation = vectordefib[i].find(";;")+2;
         int latlocation = vectordefib[i].find_last_of(";")+1;
+        int longlocation = vectordefib[i].find_last_of(";", latlocation-2)+1;
+                
         
         //get the string numbers         
         string longstring = vectordefib[i].substr(longlocation, 16);
@@ -76,14 +96,14 @@ int main()
         latstring.erase(remove(latstring.begin(), latstring.end(), ','), latstring.end());
         
         //change them to integer
-        int longint = atoi(longstring.c_str());
-        int latint = atoi(longstring.c_str());
-        cerr << "longint: " << longint << endl;
-        cerr << "latint: " << latint << endl;
+        double longint = stod(longstring.c_str());
+        double latint = stod(longstring.c_str());
+//        cerr << "longint: " << longint << endl;
+ //       cerr << "latint: " << latint << endl;
 
-        int x = calcx(lon, longint);
-        int y = calcy(lat, latint);
-        int disty = calcdistance(x,y);
+        double x = calcx(lon, longint);
+        double y = calcy(lat, latint);
+        double disty = calcdistance(x,y);
         vectordist.push_back(disty);
     }
     
@@ -93,19 +113,23 @@ int main()
         cerr << "vectordsit: " << vectordist[i] << endl;
     }
 
+    //fuckkkk, might have to change to min_element
     //find the defib number with the smallest distance
     //(max_element) is an iterator ==> dereferenced
-    auto biggest = std::max_element(std::begin(vectordist), std::end(vectordist));
-    cerr << "Max element is " << *biggest
-        << " at position " << std::distance(std::begin(vectordist), biggest) << std::endl;
-    int maxpos = distance(std::begin(vectordist), biggest)-1;
+    auto smallest = std::min_element(std::begin(vectordist), std::end(vectordist));
+    cerr << "Min element is " << *smallest
+        << " at position " << std::distance(std::begin(vectordist), smallest) << std::endl;
+    int minpos = distance(std::begin(vectordist), smallest);
 
     //lastly, output that defib name. 
-    int filenamepos = vectordefib[maxpos].find(";")+1; //position of filename
-    int fileendpos = vectordefib[maxpos].find(";", filenamepos);
+    int filenamepos = vectordefib[minpos].find(";")+1; //position of filename
+    int fileendpos = vectordefib[minpos].find(";", filenamepos);
     int difference = fileendpos-filenamepos;
-    cerr << "filenamepos: " << filenamepos << endl;
-    cerr << "fileendpos: " << fileendpos << endl;
-    string result = vectordefib[maxpos].substr(filenamepos, difference); //up to second of ;)
+    string result = vectordefib[minpos].substr(filenamepos, difference); //up to second of ;)
+    
     cout << result << endl; 
 }
+
+// it doesn't work for other test cases.case
+// need to accomodate all input data
+// (find correct way to find long and lat from input
