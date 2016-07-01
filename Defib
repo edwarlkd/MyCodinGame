@@ -38,8 +38,9 @@ double replacecomma(string str)
          break;
         }
     }
-    
     double result = stod(str.c_str()); //convert string digits to int//comma?    
+    cerr << "result = " << result << endl;
+
     return result;
 }
   
@@ -91,18 +92,12 @@ int main()
         string longstring = vectordefib[i].substr(longlocation, 16);
         string latstring = vectordefib[i].substr(latlocation,16);
         
-        //remove the comma in that string
-        longstring.erase(remove(longstring.begin(), longstring.end(), ','), longstring.end());
-        latstring.erase(remove(latstring.begin(), latstring.end(), ','), latstring.end());
-        
-        //change them to integer
-        double longint = stod(longstring.c_str());
-        double latint = stod(longstring.c_str());
-//        cerr << "longint: " << longint << endl;
- //       cerr << "latint: " << latint << endl;
-
-        double x = calcx(lon, longint);
-        double y = calcy(lat, latint);
+        //change it to double
+        double longdouble = replacecomma(longstring);
+        double latdouble = replacecomma(latstring);        
+                    
+        double x = calcx(lon, longdouble);
+        double y = calcy(lat, latdouble);
         double disty = calcdistance(x,y);
         vectordist.push_back(disty);
     }
@@ -110,7 +105,7 @@ int main()
     //output for vectordist
     for(int i = 0; i<N;i++) //error, few comes out as neg
     {
-        cerr << "vectordsit: " << vectordist[i] << endl;
+        cerr << "vectordsit[" << i << "]: " << vectordist[i] << endl;
     }
 
     //fuckkkk, might have to change to min_element
@@ -126,6 +121,9 @@ int main()
     int fileendpos = vectordefib[minpos].find(";", filenamepos);
     int difference = fileendpos-filenamepos;
     string result = vectordefib[minpos].substr(filenamepos, difference); //up to second of ;)
+    
+    //error: output stays on 'Maison pour'
+    
     
     cout << result << endl; 
 }
