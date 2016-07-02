@@ -2,8 +2,21 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <locale> 
 
 using namespace std;
+
+string tolow(string str)
+{
+    locale loc;
+    for (std::string::size_type i=0; i<str.length(); ++i)
+    {
+        str[i] = tolower(str[i],loc);
+    }
+    string result = str;
+
+ return result;   
+}
 
 /**
  * Auto-generated code below aims at helping you parse
@@ -19,83 +32,93 @@ int main()
     cerr << "N: " << N << endl;
     cerr << "Q: " << Q << endl;
     
-    vector<string> ext;
-    vector<string> mt;
-    vector<string> filenames;
-    
-    vector<string> fileext;
-    vector<string> filemt;
-    vector<string> vectoroutput;
-    vector<string> output;
+    //default input stuff
+    vector<string> vecEXT;
+    vector<string> vecMT;
+    vector<string> vecFNAME;    
 
+    //default 
     for (int i = 0; i < N; i++) {
         string EXT; // file extension
         string MT; // MIME type.
         cin >> EXT >> MT; cin.ignore();
-        cerr << "EXT: " << EXT << " || MT: " << MT << endl;
-        ext.push_back(EXT);
-        mt.push_back(MT);
-    }
+
+        EXT = tolow(EXT);
+        //MT = tolow(MT); //this one stays as it. 
+        vecEXT.push_back(EXT);
+        vecMT.push_back(MT);
+    
+        cerr << "EXT&MT = " << EXT << "   " << MT << endl;
+    }       
     for (int i = 0; i < Q; i++) {
         string FNAME; // One file name per line.
         getline(cin, FNAME);
-        cerr << "FNAME: " << FNAME << endl;
         
-        filenames.push_back(FNAME); //just filenames collection.
+        FNAME = tolow(FNAME);
+        vecFNAME.push_back(FNAME);    
+    
+        cerr << "Fname: " << FNAME << endl;       
+
+    }
+
+    //from file name, extract the name and extension.
+    vector<string> vfilename;
+    vector<string> vfileext;
+    
+    locale loc; //for lowercase
+
+    for (int i= 0; i < vecFNAME.size(); i++)
+    {
+        int index = vecFNAME[i].find_last_of('.');
+
+        vfilename.push_back(vecFNAME[i].substr(0, index));
+        vfileext.push_back(vecFNAME[i].substr(index+1));
+
+//    cerr << "Before tolow" << endl;
+//    cerr << "vfilename[" << i << "] = " << vfilename[i] << endl;
+//    cerr << "vfileext[" << i << "] = " << vfileext[i] << endl; 
+     
+        //lower case them all for test#2 
+//        vfilename[i] = tolow(vfilename[i]);
+//        vfileext[i] = tolow(vfileext[i]);
         
-        //just end part
-        int pos = FNAME.find_last_of('.');
-        cerr << "Pos: " << pos << endl; 
-        string mtword = FNAME.substr(pos+1); //pos == location of '.'
-        if(pos < 0)
-        {
-            fileext.push_back("");
-        }
-        else
-        {
-            fileext.push_back(mtword);
-        }
-        cerr << "mtword: " << mtword << endl;
-        cerr << "nextloop------------------------------" << endl;
-        //when pos is not foud for '.', mtword becomes FIRSTNAME
+//    cerr << "Folowings are after tolower" << endl;
+//    cerr << "vfilename[" << i << "] = " << vfilename[i] << endl;
+//   cerr << "vfileext[" << i << "] = " << vfileext[i] << endl; 
+        
+        //then consider the correct division of filename mbc
+
     }
     
-    //defaults: ext, mt
-    //variables: fileext, filemt, vectoroutput    
-    
-    for(int i = 0; i < Q; i++) //for # of files.
+    //output
+    vector<string> output;
+    for(int i = 0; i < Q; i++) //using fileext
     {
-        int count1 = 0;    
-        for(int j = 0; j < N;j++) //for # of ext. 
+        int unknowncter = 0;
+        
+        //vecEXT, vecMT, vecFNAME
+        //if vecEXT[i] == 
+        for(int j = 0; j< N; j++) //compare with vecEXT to see if matching found
         {
-            if(fileext[i] == ext[j])
+            unknowncter++;
+            //if matching found
+            if(vfileext[i] == vecEXT[j])
             {
-                output.push_back(mt[j]);
-                break;
+                output.push_back(vecMT[j]);
             }
-            //find a case for 'UNKNOWN'
-            if(fileext[i] != ext[N-1] && j == N-1)
+            else if(unknowncter==N) //
             {
+            //for unknown.
+            //so if this second loop fails, then output unkonwn
                 output.push_back("UNKNOWN");
             }
         }
-        //cerr << "what: " << output[i] << endl;
+        
     }
-    
-    
-    //use for loop for Q numbers of file. 
-    //read the file--- 1. ignore upto '.' 
-    // 2. so read only the file extension
-    //if it matches one of the option, output = that MT
-    //else, 'UNKNOWN 
-    
-    //final output
-    for(int i = 0; i < Q; i++)
+
+    for(int i=0;i<output.size();i++)
     {
-        cout << output[i] << endl;
+        cout << output[i] << endl;   
     }
-    
-    
-    
-    
-} //end of main
+
+}
