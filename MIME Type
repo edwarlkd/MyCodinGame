@@ -105,17 +105,20 @@ int main()
             if(vfileext[i] == vecEXT[j])
             {
                 output.push_back(vecMT[j]);
+                break;
             }
-            else if(unknowncter==N) //
+            if(unknowncter==N) //
             {
             //for unknown.
             //so if this second loop fails, then output unkonwn
                 output.push_back("UNKNOWN");
+                break;
             }
         }
         
     }
 
+    cerr << "---------------output-----------" << endl;
     for(int i=0;i<output.size();i++)
     {
         cout << output[i] << endl;   
