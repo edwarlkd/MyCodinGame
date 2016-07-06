@@ -1,0 +1,71 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+int main()
+{
+    int N;
+    cin >> N; cin.ignore();
+
+    vector<int> vecints;
+    
+  //  cerr << "N: " << N << endl;
+    
+    for (int i = 0; i < N; i++) {
+        int Pi;
+        cin >> Pi; cin.ignore();
+        
+        vecints.push_back(Pi);
+        
+//        cerr << "Pi: " << Pi << endl; 
+    }
+    
+    
+    //fetch the first value and compare with the rest of the set
+    //then fetch 2nd value, and compare with index 3 to end
+    //continue until last two value are defined.
+    // 5  8  9   2   6
+    int index =0;
+    int initial = vecints[index];
+    int tempdiff = 0;
+    int diff = 100;
+
+    while(index < N)
+    {
+        tempdiff = 0;
+        
+        for(int i = index+1;i <= N; i++)
+        {
+        tempdiff = abs(initial-vecints[i]);
+        
+//        cerr << "initial: " << initial << endl;
+//        cerr << "vecints[" << i << "] = " << vecints[i] << endl;
+//        cerr << "tempdiff: " << tempdiff << endl; 
+        
+        
+        if(tempdiff < diff)
+        {
+            diff = tempdiff;
+ //           cerr << "diff: " << diff << endl;
+        }     
+    
+        }
+        
+        index++;
+        initial = vecints[index];
+   //     cerr << "end of whileloop" << endl << endl;
+    }
+    
+    //find two numbers that are closest. 
+    
+    //output the difference 
+    cout << diff << endl; 
+    
+}
