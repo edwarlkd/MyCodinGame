@@ -70,13 +70,22 @@ int main()
     for (int i= 0; i < vecFNAME.size(); i++)
     {
         int index = vecFNAME[i].find_last_of('.');
-
+        
+        if( index == -1) //if no '.' is found
+        {
+            //meh kinda does the job
+        index = 0;
+        vfilename.push_back(vecFNAME[i].substr(0, index)); //empty
+        vfileext.push_back(vecFNAME[i].substr(index+1)); //if 'mp3', then this 'p3'.  
+        }
+        else
+        {
         vfilename.push_back(vecFNAME[i].substr(0, index));
         vfileext.push_back(vecFNAME[i].substr(index+1));
-
-//    cerr << "Before tolow" << endl;
-//    cerr << "vfilename[" << i << "] = " << vfilename[i] << endl;
-//    cerr << "vfileext[" << i << "] = " << vfileext[i] << endl; 
+        }
+        cerr << "index: " << index << endl;
+        cerr << "vfilename[" << i << "] = " << vfilename[i] << endl;
+        cerr << "vfileext[" << i << "] = " << vfileext[i] << endl; 
      
         //lower case them all for test#2 
 //        vfilename[i] = tolow(vfilename[i]);
