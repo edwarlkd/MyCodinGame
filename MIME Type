@@ -60,7 +60,7 @@ int main()
         cerr << "Fname: " << FNAME << endl;       
 
     }
-
+//
     //from file name, extract the name and extension.
     vector<string> vfilename;
     vector<string> vfileext;
